@@ -4,12 +4,27 @@ body {
     justify-content: center;
     background-color: #1f1f1f;
     color: wheat;
+    font-family: 'Courier New', Courier, monospace;
+
+}
+
+h1 {
+    display: flex;
+    height: 90vh;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+#win {
+    color: #ffdd00;
+    display: none;
 }
 
 .squarebox {
     display: none;
-    grid-template-columns: repeat(10, 50px);
-    gap: 5px;
+    grid-template-columns: repeat(20, 25px);
+    gap: 2px;
     align-items: center;
     justify-content: center;
     margin-top: 50px;

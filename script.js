@@ -2,26 +2,17 @@ let squares;
 let sponge_pos;
 let hole_pos;
 let next_pos_color;
+let move_counter;
 
 function deleteStartMessage() {
     const start_message = document.getElementById("start_message");
     start_message.remove();
 }
 
-function toggleSquarebox() {
+function toggleSquarebox(mode) {
     var squarebox = document.getElementById("squares");
-    squarebox.style.display = "grid";
+    squarebox.style.display = mode;
 }
-
-document.addEventListener("DOMContentLoaded", (event) => {
-    document.addEventListener("keydown", (event) => {
-        if(event.key === "Enter") {
-            deleteStartMessage();
-            toggleSquarebox();
-            startGame();
-        }
-    });
-});
 
 function setSponge(squares) {
     sponge_pos = 0;
@@ -29,11 +20,9 @@ function setSponge(squares) {
 }
 
 function setHoles(squares) {
-    for(let i = 0; i < 25; i++) {
+    for(let i = 0; i < 100; i++) {
         hole_pos = Math.floor(Math.random() * squares.length);
-        if(squares[hole_pos].style.backgroundColor != "rgb(113, 126, 40)" &&
-            (holeAllowed(hole_pos + 10) || holeAllowed(hole_pos + 1) || holeAllowed(hole_pos - 1) || holeAllowed(hole_pos - 10))
-        ) {
+        if(squares[hole_pos].style.backgroundColor != "rgb(113, 126, 40)" && hole_pos != 399) {
             squares[hole_pos].style.backgroundColor = "#1f1f1f";
         }
         else {
@@ -42,45 +31,24 @@ function setHoles(squares) {
     }
 }
 
-function holeAllowed(position) {
-    const target_color = squares[position].style.backgroundColor;
-    return target_color !== "rgb(31, 31, 31)";
-}
-
 function startGame() {
     squares = Array.from(document.querySelectorAll(".squarebox div"));
+    move_counter = 0;
     setSponge(squares);
     setHoles(squares);
 }
 
-
+document.addEventListener("DOMContentLoaded", (event) => {
+    document.addEventListener("keydown", (event) => {
+        if(event.key === "Enter") {
+            deleteStartMessage();
+            toggleSquarebox("grid");
+            startGame();
+        }
+    });
+});
 
 // ----- in dev
-
-document.addEventListener("keydown", (event) => {
-    switch(event.key) {
-        case "ArrowUp":
-            if(sponge_pos > 9 && movementAllowed(sponge_pos - 10)) {
-                sponge_pos = updateSquare(sponge_pos, -10);
-            }
-            break;
-        case "ArrowLeft":
-            if(sponge_pos % 10 != 0 && movementAllowed(sponge_pos - 1)) {
-                sponge_pos = updateSquare(sponge_pos, -1);
-            }
-            break;
-        case "ArrowRight":
-            if(sponge_pos % 10 != 9 && movementAllowed(sponge_pos + 1)) {
-                sponge_pos = updateSquare(sponge_pos, 1);
-            }
-            break;
-        case "ArrowDown":
-            if(sponge_pos < 90 && movementAllowed(sponge_pos + 10)) {
-                sponge_pos = updateSquare(sponge_pos, 10);
-            }
-            break;
-    }
-});
 
 function movementAllowed(position) {
     const target_color = squares[position].style.backgroundColor;
@@ -90,5 +58,41 @@ function movementAllowed(position) {
 function updateSquare(sponge_pos, distance) {
     sponge_pos += distance;
     squares[sponge_pos].style.backgroundColor = "rgba(113, 126, 40, 1)";
+    move_counter++;
     return sponge_pos;
 }
+
+function checkWin(sponge_pos) {
+    return sponge_pos === 399;
+}
+
+document.addEventListener("keydown", (event) => {
+    switch(event.key) {
+        case "ArrowUp":
+            if(sponge_pos > 19 && movementAllowed(sponge_pos - 20)) {
+                sponge_pos = updateSquare(sponge_pos, -20);
+            }
+            break;
+        case "ArrowLeft":
+            if(sponge_pos % 20 != 0 && movementAllowed(sponge_pos - 1)) {
+                sponge_pos = updateSquare(sponge_pos, -1);
+            }
+            break;
+        case "ArrowRight":
+            if(sponge_pos % 20 != 19 && movementAllowed(sponge_pos + 1)) {
+                sponge_pos = updateSquare(sponge_pos, 1);
+            }
+            break;
+        case "ArrowDown":
+            if(sponge_pos < 380 && movementAllowed(sponge_pos + 20)) {
+                sponge_pos = updateSquare(sponge_pos, 20);
+            }
+            break;
+    }
+    if(checkWin(sponge_pos)) {
+        toggleSquarebox("none");
+        var win_message = document.getElementById("win");
+        win_message.style.display = "flex";
+        document.getElementById("win").innerHTML = "Congratulations!<br>You won after " + move_counter + " moves!";
+    }
+});
