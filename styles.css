@@ -1,0 +1,20 @@
+body {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    background-color: #1f1f1f;
+    color: wheat;
+}
+
+.squarebox {
+    display: none;
+    grid-template-columns: repeat(10, 50px);
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+}
+.squarebox div {
+    background-color: rgb(41, 45, 70);
+    aspect-ratio: 1;
+}
