@@ -20,9 +20,10 @@ function setSponge(squares) {
 }
 
 function setHoles(squares) {
-    for(let i = 0; i < 100; i++) {
+    for(let i = 0; i < 124; i++) {
         hole_pos = Math.floor(Math.random() * squares.length);
-        if(squares[hole_pos].style.backgroundColor != "rgb(113, 126, 40)" && hole_pos != 399) {
+        if(squares[hole_pos].style.backgroundColor != "rgb(113, 126, 40)" && 
+            hole_pos != 399 && hole_pos != 1 && hole_pos != 20 && hole_pos != 21 && hole_pos != 398 && hole_pos != 379 && hole_pos != 378 ) {
             squares[hole_pos].style.backgroundColor = "#1f1f1f";
         }
         else {
@@ -48,8 +49,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     });
 });
 
-// ----- in dev
-
 function movementAllowed(position) {
     const target_color = squares[position].style.backgroundColor;
     return target_color != "rgb(31, 31, 31)" && target_color != "rgb(113, 126, 40)";
@@ -64,6 +63,12 @@ function updateSquare(sponge_pos, distance) {
 
 function checkWin(sponge_pos) {
     return sponge_pos === 399;
+}
+function winner() {
+    toggleSquarebox("none");
+    var win_message = document.getElementById("win");
+    win_message.style.display = "flex";
+    document.getElementById("win").innerHTML = "Congratulations!<br>You won after " + move_counter + " moves!";
 }
 
 document.addEventListener("keydown", (event) => {
@@ -90,9 +95,6 @@ document.addEventListener("keydown", (event) => {
             break;
     }
     if(checkWin(sponge_pos)) {
-        toggleSquarebox("none");
-        var win_message = document.getElementById("win");
-        win_message.style.display = "flex";
-        document.getElementById("win").innerHTML = "Congratulations!<br>You won after " + move_counter + " moves!";
+        winner();
     }
 });
